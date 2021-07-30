@@ -1,5 +1,4 @@
 import { Stage, Layer, Rect } from 'react-konva';
-import { useRef } from 'react';
 import { TEventListItem } from '../../helpers/adoptEventsFromServer';
 import { TListItem } from '../ListItem/ListItem';
 import { CanvasEvent } from './CanvasEvent';
@@ -10,16 +9,14 @@ const CANVAS_WIDTH = 500;
 const CANVAS_HEIGHT = 400;
 
 interface CanvasProps {
-  activeTimezone: TListItem;
-  activeEvent: TEventListItem;
+  activeTimezone?: TListItem;
+  activeEvent?: TEventListItem;
 }
 
 export default function Canvas({ activeTimezone, activeEvent }: CanvasProps) {
-  const stageRef = useRef();
-
-  const activeTimezoneLabel = activeTimezone.label;
-  const activeEventLabel = activeEvent.label;
-  const { start, end } = activeEvent;
+  const activeTimezoneLabel = activeTimezone && activeTimezone.label;
+  const activeEventLabel = activeEvent && activeEvent.label;
+  const { start, end } = activeEvent || {};
 
   const localStart = moment.tz(start, activeTimezoneLabel);
   const localEnd = moment.tz(end, activeTimezoneLabel);
@@ -30,7 +27,7 @@ export default function Canvas({ activeTimezone, activeEvent }: CanvasProps) {
   const timeLabel = `${localStartLabel} - ${localEndLabel}`;
 
   return (
-    <Stage width={CANVAS_WIDTH} height={CANVAS_HEIGHT} ref={stageRef}>
+    <Stage width={CANVAS_WIDTH} height={CANVAS_HEIGHT}>
       {/* Background */}
       <Layer>
         <Rect
